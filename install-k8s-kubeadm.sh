@@ -1,4 +1,4 @@
-host=`cat hostname`
+host=`hostname`
 kubeversion="1.17.8-00"
 
 
