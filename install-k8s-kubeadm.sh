@@ -49,7 +49,7 @@ sudo sysctl -p
 
 if [ "$host" = "sammyboyle1c.mylabserver.com" ]; 
 then 
-sudo kubeadm init --pod-network-cidr=10.244.0.0/16 |grep '^kube' > init.cmd
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16  > init.cmd
 chmod +x init.cmd
 #scp init.cmd cloud_user@sammyboyle2c.mylabserver.com
 #scp init.cmd cloud_user@sammyboyle3c.mylabserver.com
