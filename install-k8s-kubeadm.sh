@@ -1,5 +1,5 @@
 host=`hostname`
-kubeversion="1.17.8-00"
+kubeversion="1.20.0-00"
 
 
 
@@ -47,7 +47,7 @@ read x
 sudo sysctl -p
 
 
-if [ "$host" = "sammyboyle1c.mylabserver.com" ]; 
+if [ "$host" = "master" ]; 
 then 
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16  > init.cmd
 chmod +x init.cmd
