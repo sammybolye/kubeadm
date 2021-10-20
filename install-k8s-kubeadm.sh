@@ -62,5 +62,8 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 kubectl apply -f https://docs.projectcalico.org/v3.14/manifests/calico.yaml
 
+token=`kubeadm token generate`
+
+kubeadm token create "$token" --print-join-command > token.sh
 
 fi
