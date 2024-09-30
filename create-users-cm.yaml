@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-script-config
+data:
+  create_users.sh: |
+    #!/bin/bash
+
+    # CSV variable containing username:password:group entries
+    USER_LIST="sam:password123:developers,ken:password456:admins"
+
+    # Check if USER_LIST is empty
+    if [ -z "$USER_LIST" ]; then
+      echo "No users to create."
+      exit 0
+    fi
+
+    # Set Internal Field Separator to comma to split entries
+    IFS=','
+    
+    # Loop over each user entry
+    for entry in $USER_LIST; do
+      # Separate the username, password, and group
+      IFS=':' read -r username password groupname <<< "$entry"
+
+      # Create group if it doesn't exist
+      if ! getent group "$groupname" > /dev/null 2>&1; then
+        groupadd "$groupname"
+        echo "Group '$groupname' created."
+      fi
+
+      # Create user if it doesn't exist
+      if ! id -u "$username" > /dev/null 2>&1; then
+        useradd -m -g "$groupname" "$username"
+        echo "User '$username' created."
+      fi
+
+      # Set the user's password
+      echo "$username:$password" | chpasswd
+      echo "Password set for user '$username'."
+
+    done
