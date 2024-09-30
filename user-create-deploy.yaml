@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      securityContext:
+        runAsUser: 0
+      containers:
+        - name: nginx 
+          image: nginx
+          volumeMounts:
+            - name: script-volume
+              mountPath: /scripts/create_users.sh
+              subPath: create_users.sh
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/bash", "/scripts/create_users.sh"]
+          # Include any other configurations needed
+      volumes:
+        - name: script-volume
+          configMap:
+            name: user-script-config
+            defaultMode: 0755
+            items:
+              - key: create_users.sh
+                path: create_users.sh
